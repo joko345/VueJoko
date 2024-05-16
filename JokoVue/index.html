@@ -11,11 +11,16 @@
     <div id="app">
       <script type="module" src="/src/main.ts"></script>
       {{ message }}
+      <p v-text='message'></p>
       <p>
         {{ myFunc() }}
       </p>
       <img v-bind:src='img' :alt='alt'/> <!-- vbin mengikat element vuejs agar bisa digunakan/dipanggil di html
       vbind bisa dipanggil dengan v-bin atau hanya : -->
+      <p>
+        <a :href="myLink">Go to GitHub</a> <!-- v-bind -->
+      <p v-html="webHtml"></p><!-- v-html membaca elemen html --> 
+      </p>
     </div> 
 </body>
 <script>
@@ -24,6 +29,8 @@
         return {
           img: "https://thumbs2.imgbox.com/1d/be/9X4zODkU_t.jpg",
           alt: 'image',
+          webHtml: '<strong> this is html </html>',
+          myLink: 'https://github.com/joko345/React',
           message: 'hello world 11',
           func: () => { //func tidak bisa mengakses data lain diluar data()
             // Implementasi fungsi di sini
