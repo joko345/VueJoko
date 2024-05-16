@@ -1,0 +1,39 @@
+ <!-- {{ message }}// Memanggil data dari message
+      <p>
+        {{ trueFalse }}
+      </p>
+      <p>
+       {{ array2[1] }} 
+      </p>
+      <p>
+        Halo my name is {{ myObj.name }} my job is {{ myObj.job }}
+      </p>
+      <p>
+        {{ greeting }} 
+       </p>
+      <p>
+        {{ myFunc() }}
+      </p>-->
+
+       // const { createApp} = Vue
+
+   //createApp ({
+    //data() {
+      //return{
+     // message: 'Hello World 2', 
+     // trueFalse: false,
+     // array2: [
+     //   'Joko',
+     //   'Denis'
+      //],
+   //   myObj:{
+  //      name: 'Spider',
+    //    job: 'hero'
+   //   },
+   //   greeting: 'today is ' + new Date().toLocaleString(),
+   //   myFunc:() => {
+  //      return 'Asli Joko'
+ //     }
+   // }
+//  }
+ // }).mount('#app')

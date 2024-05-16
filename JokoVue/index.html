@@ -4,10 +4,49 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <title>Vite App</title>
   </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<body>
+    <div id="app">
+      <script type="module" src="/src/main.ts"></script>
+      {{ message }}
+      <p>
+        {{ myFunc() }}
+      </p>
+      <img v-bind:src='img' :alt='alt'/> <!-- vbin mengikat element vuejs agar bisa digunakan/dipanggil di html
+      vbind bisa dipanggil dengan v-bin atau hanya : -->
+    </div> 
+</body>
+<script>
+    const App = {//cara lain membuat vue
+      data() {
+        return {
+          img: "https://thumbs2.imgbox.com/1d/be/9X4zODkU_t.jpg",
+          alt: 'image',
+          message: 'hello world 11',
+          func: () => { //func tidak bisa mengakses data lain diluar data()
+            // Implementasi fungsi di sini
+          },
+          trueFalse: true,
+          myArray: [
+            'Joko',
+            'Usia'
+          ]
+        };
+      }, //methods ada di bawah data
+      methods: {
+        myFunc() {//bisa mengakses data apapun di vue karena myFunc bukan bagian suatu fungsi data()
+           const randomArray = this.myArray[Math.floor(Math.random() * this.myArray.length)];
+           
+           if (this.trueFalse) {//karena hasilnya true maka indeks ke 0 ditampilkan
+            return this.myArray[0]
+           }
+           return ' hello world 2 ' + this.message + ' ' + randomArray;
+        }
+      },
+    }
+    Vue.createApp(App).mount('#app')
+</script>
+
 </html>
