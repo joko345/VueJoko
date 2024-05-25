@@ -1,35 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <title>Vite App</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Vite App</title>
+  <!-- Pindahkan script ini ke head atau akhir body -->
+  <script type="module" src="/src/main.ts"></script>
+</head>
 <body>
-    <div id="app">
-      <script type="module" src="/src/main.ts"></script>
-      {{ message }}
-      <p v-text='message'></p>
-      <p>
-        {{ myFunc() }}
-      </p>
-      <img v-bind:src='img' :alt='alt'/> <!-- vbin mengikat element vuejs agar bisa digunakan/dipanggil di html
-      vbind bisa dipanggil dengan v-bin atau hanya : -->
-      <p>
-        <a :href="myLink">Go to GitHub</a> <!-- v-bind -->
-      <p v-html="webHtml"></p><!-- v-html membaca elemen html --> 
-      </p>
-    </div> 
-</body>
-<script>
-    const App = {//cara lain membuat vue
+  <div id="app">
+    {{ message }}
+    <p v-text='message'></p>
+    <p>
+      {{ myFunc() }}
+    </p>
+    <img v-bind:src='img' :alt='alt'/> <!-- vbin mengikat element vuejs agar bisa digunakan/dipanggil di html vbind bisa dipanggil dengan v-bin atau hanya : -->
+    <p>
+      <a :href="myLink">Go to GitHub</a> <!-- v-bind -->
+    </p>
+    <p v-html="webHtml"></p><!-- v-html membaca elemen html --> 
+    <p v-if="checkWeight()">Kamu boleh bertanding di kelas 60kg</p><!-- menggunakan fungsi (). jika tidak menggunakan fungsi 
+      menggunakan fungsi v-if="weight > allowedWeight">Kamu boleh bertanding di berat 60kg -->
+    <p v-else-if="checkName()">Kamu tetap boleh bertanding</p>
+    <p v-else-if="age < 30">Kamu tetap boleh bertanding karena usia sesuai</p>
+    <p v-else>Kamu tidak boleh bertanding di 60kg</p><!-- if else tidak boleh dipisah paragrafnya -->
+    <p v-show="name === 'Jon'">Kamu boleh bertanding karena juara menggunakan vshow</p> 
+    <!-- v-show, jika hasil adalah false maka di DOM akan tampil css display none yang bisa diliat pada inspect elemen
+    jika v-if kalau hasil false code tidak akan muncul di inspect/terhidden. vshow tidak ada else -->
+    <p v-for="(child, index) in childs">{{ child }} : {{ index }}</p><!-- index menampilkan urutan index -->
+    <p v-for="mobil in cars">{{ mobil.brands }} : {{ mobil.color }}</p>
+    <p v-for="(value, key, index) in person ">{{ key }} : {{value}}</p><!-- penamaan value,key bebas -->
+    <p v-once>{{ name }}</p><!-- disable update agar baris ini tidak terefek fungsi timeout, dll-->
+    <p>{{ name }}</p>
+    {{ updateName() }}
+    <div :click="updateName2">change name</div><!-- pada v-on method dikenal langsung dan tanpa harus memberikan (). 
+      cara lain bisa v-on: atau @click sesuai event-->
+      <div class="box" v-on:mousemove="getCoordinate" v-on:click.right="updateBox('box letter changed', $event)">{{ box }}</div>
+      coordinate x is {{ x }}                    <!-- .right membuat hanya bisa di click kanan agar berfungsi-->   
+      coordinate y is {{ y }}
+      <form v-on:submit.prevent="handleForm"><!-- prevent default-->
+        <input/>
+        <button type="submit">
+          submit form</button>
+      </form>
+      <input type="text" v-on:keyup.g.k="showEvent"/><!-- key yang di ketik baru akan muncul 
+        setelah tombol g atau k ditekan(tidak case-sensitive)-->
+      <form v-on:submit.prevent="handleForm">
+        <label>First Name</label>
+        <input type="text" v-model.lazy="dataPerson.firstName"/><!-- v-model menampilkan data dalam field saat page muncul-->
+        {{ dataPerson.firstName }}<!-- lazy. teks akan muncul setelah selesai mengetik dan mengetuk area lain-->
+        <hr>
+
+        <label>Last Name</label>
+        <input type="text" v-model.trim="dataPerson.lastName"/> <!-- trim menghapus blankspace/spasi -->
+        {{ dataPerson.lastName }} <!-- teks akan muncul huruf-perhuruf saat sedang mengetik-->
+        <hr>
+        <label>Age</label>
+        <input type="text" v-model.number="dataPerson.age"/> <!-- model number hanya membaca angka didepan dan string setelahnya dihiraukan. agar bisa 
+          input angka dengan mengetik tidak dengan scroll seperti type='number'. -->
+        {{ dataPerson.age }}
+        <hr>
+        <label>check box</label>
+        <input type="checkbox" id='myCheckBox' v-model="dataPerson.checked">
+        {{ dataPerson.checked}}
+        <button type="submit">Submit</button>
+
+        <div class="kotak" v-bind:class="blueColor"><!-- (class dynamic) mengambil setting berdasarkan data yang ada.
+          true/false diambil dari object bluecolor dimana blue true sudah disetting -->
+          this is my normal box
+        </div>
+
+        <div v-on:click="blueColor.white = !blueColor.white">change color</div>
+        <div class="kotak2" v-bind:class="[
+        colorStyle.blueStyle.active ? colorStyle.blueStyle.name : '', 
+        colorStyle.whiteStyle.active ? colorStyle.whiteStyle.name : '']"
+        v-bind:style="newStyle"
+        >
+          this is my normal box
+        </div>
+        <div v-on:click="colorStyle.whiteStyle.active = !colorStyle.whiteStyle.active">change color</div>
+      </form>
+
+      </form>
+  </div> 
+
+  <script>
+    const App = { // cara lain membuat vue
       data() {
         return {
+          weight: 20,
+          allowedWeight: 60,
+          name: 'Jon',
+          age: 245,
+          childs: [
+          'Joko',
+          'Budi',
+          'Jon'
+          ],
+          cars: [
+          {
+            brands: 'honda',
+            color: 'white'
+          },
+          {
+            brands: 'suzuki',
+            color: 'black'
+          },
+          {
+            brands: 'Yamaha',
+            color: 'red'
+          }
+          ],
+          person: { //masukan ke object agar pemanggilan tiap data mudah
+          name: 'Joko',
+          age: 22,
+          birthday : '22-02-2002'
+          },
+          x: 0,
+          y: 0,
+          dataPerson:{
+          firstName:'Joko',
+          lastName:'Utomo',
+          age:'', 
+          checked: false,
+       
+          },
+          newStyle:{
+            fontSize:'20px',
+            border: '5px solid yellow'
+          },
           img: "https://thumbs2.imgbox.com/1d/be/9X4zODkU_t.jpg",
           alt: 'image',
-          webHtml: '<strong> this is html </html>',
+          webHtml: '<strong>this is html</strong>',
           myLink: 'https://github.com/joko345/React',
           message: 'hello world 11',
           func: () => { //func tidak bisa mengakses data lain diluar data()
@@ -39,21 +143,103 @@
           myArray: [
             'Joko',
             'Usia'
-          ]
+          ],
+          box: 'change box',
+          blueColor:{
+            blue: true,
+            white: false
+          },
+          colorStyle: {
+            blueStyle: {
+              name: 'blue',
+              active: true
+            },
+            whiteStyle: {
+              name: 'white',
+              active: false,
+            },
+      
+          }
         };
-      }, //methods ada di bawah data
-      methods: {
-        myFunc() {//bisa mengakses data apapun di vue karena myFunc bukan bagian suatu fungsi data()
-           const randomArray = this.myArray[Math.floor(Math.random() * this.myArray.length)];
-           
-           if (this.trueFalse) {//karena hasilnya true maka indeks ke 0 ditampilkan
-            return this.myArray[0]
-           }
-           return ' hello world 2 ' + this.message + ' ' + randomArray;
+      },
+      watch: {
+        aktif(value){
+          console.log(value)
+          console.log('watch is active')
         }
       },
+      methods: {
+        myFunc() { // bisa mengakses data apapun di vue karena myFunc bukan bagian suatu fungsi data()
+          const randomArray = this.myArray[Math.floor(Math.random() * this.myArray.length)];
+          if (this.trueFalse) { // karena hasilnya true maka indeks ke 0 ditampilkan
+            return this.myArray[0];
+          }
+          return ' hello world 2 ' + this.message + ' ' + randomArray;
+        },
+        checkWeight() {
+          return this.weight > this.allowedWeight ? true : false
+        },
+        checkName(){
+          return this.name === 'Jon' ? true : false
+        },
+        updateName(){
+          setTimeout(() => { 
+            this.name='Joko';
+          }, 2000);
+        },
+        updateName2(){
+          this.name='Cena';
+        },
+        getCoordinate(event){//menangkap fungsi getCoordinate yang ada di div class box
+          this.x = event.clientX
+          this.y = event.clientY
+        },
+        updateBox(newBox, event){
+          console.log(event)
+          this.box = newBox
+        },
+        handleForm(){//perlu (event) agar preventDefault bisa berjalan
+          //event.preventDefault()//event bawaan membuat page te refresh saat tombol di click 
+          //menyebabkan 'submited' tidak muncul
+          console.log(this.firstName)
+          console.log(this.lastName)
+          console.log(this.age)
+          console.log(this.checked)
+        },
+        showEvent(event){
+          console.log(event.target.value)//menampilkan key yang dipencet di console
+        }
+        }
+      }
+    
+    Vue.createApp(App).mount('#app');
+  </script>
+  <style>
+    .box{
+      background: aqua;
+      width: 200px;
+      height: 20px;
     }
-    Vue.createApp(App).mount('#app')
-</script>
-
+    .kotak{
+      color:white;
+      background: black;
+      padding: 20px;
+    }
+    .kotak2{
+      color:green;
+      background: blue;
+      padding: 20px;
+    }
+    .blue{
+      background: blue;
+    }   
+    .white{
+      background: rgb(238, 0, 0);
+      color: green;
+    }
+    .large{
+      font-size: 40px;
+    }
+  </style>
+</body>
 </html>
