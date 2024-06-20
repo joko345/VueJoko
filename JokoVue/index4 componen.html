@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Vite App</title>
+</head>
+<body>
+  <div id="app">
+    <header-apps></header-apps>
+    <button-buatan></button-buatan>
+    <user-name></user-name>
+
+  </div> 
+
+  <script>
+    const App = Vue.createApp({}); //const membuat vue, app.component membuat vue menjadi komponen  
+
+    App.component('button-buatan', {
+      data() {
+        return {
+          name: 'Joko'
+        };
+      },
+      template: '<button class="button-green"> {{ name }} </button>'
+    })
+    App.component('user-name', {
+      data() {
+        return {
+          name: 'Joko'
+        };
+      },
+      template: '<div> {{ name }} </div>'
+    
+    }), 
+    App.component('header-apps', {
+      data() {
+        return {
+          name: 'HEADER'
+        };
+      },
+      template: "<div class='box'> {{ name }} </div>"
+      }); 
+      App.mount('#app');
+
+    
+    
+      //template: '<div> {{ value  }} </div>'
+      //template menghindari kemunculan syntaks {{value}} sebelum muncul 'instance one'
+    //};
+    //setTimeout(() =>{
+        //Vue.createApp(AppOne).mount('#appOne');
+   // }, 3000)
+
+  </script>
+
+
+
+  <style>
+    .button-green{
+      background: green;
+      padding: 20px;
+    }
+    .box {
+      background: aqua;
+ 
+    }
+    .kotak {
+      color: white;
+      background: black;
+      padding: 20px;
+    }
+    .kotak2 {
+      color: green;
+      background: blue;
+      padding: 20px;
+    }
+    .blue {
+      background: blue;
+    }   
+    .white {
+      background: rgb(238, 0, 0);
+      color: green;
+    }
+    .large {
+      font-size: 40px;
+    }
+  </style>
+</body>
+</html>

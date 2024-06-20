@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Vite App</title>
+  <!-- Pindahkan script ini ke head atau akhir body -->
+</head>
+<body>
+  <div id="appOne">
+  <p> value of {{ value }} </p>
+  <button @click="changeValue"> change value of instance two</button>
+  </div> 
+  <div id="appTwo">
+    <p> value of {{ value }}</p>
+    <button @click="combineBoth"> change value of instance two</button>
+  </div> 
+  <script>
+    let greeting = 'welcome back'
+    const AppOne = Vue.createApp({
+      data() {
+        return {
+            value: 'instance one'
+        }
+      },
+      methods: {
+        changeValue(){
+          console.log(AppTwo.value)
+          AppTwo.value = 'change instance one to instance two'
+        }
+
+        },
+      }).mount('#appOne')
+ 
+    
+    
+    //Vue.createApp(AppOne).mount('#appOne');//vue membuat instance
+    //instance membuat vue
+    const appTwo = Vue.createApp({
+      data() {
+        return {
+          value: 'instance two'
+        }
+      },
+      methods: {
+        changeValue2(){
+          console.log(AppOne.value);
+          AppOne.value = 'change instance two to instance one';
+        },
+        greetingMes(){
+          alert(greeting);
+        },
+        combineBoth(){
+          this.changeValue2();
+          this.greetingMes();
+        }
+      }
+    }).mount('#appTwo');
+  </script>
+
+
+  <style>
+    .box{
+      background: aqua;
+      width: 200px;
+      height: 20px;
+    }
+    .kotak{
+      color:white;
+      background: black;
+      padding: 20px;
+    }
+    .kotak2{
+      color:green;
+      background: blue;
+      padding: 20px;
+    }
+    .blue{
+      background: blue;
+    }   
+    .white{
+      background: rgb(238, 0, 0);
+      color: green;
+    }
+    .large{
+      font-size: 40px;
+    }
+  </style>
+</body>
+</html>
